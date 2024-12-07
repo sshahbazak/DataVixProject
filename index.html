@@ -1,110 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COVID-19 Dashboard</title>
-    
-    <!-- External Libraries -->
+    <link rel="stylesheet" href="styles.css">
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
     <script src="https://datamaps.github.io/scripts/0.4.4/datamaps.world.min.js"></script>
-    <script src="centroids.js"></script>
+    <script src="centroids.js"></script> <!-- Include your new country centroids file -->
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
     <style>
         /* Button Styles */
-.tab-button {
-    background-color: #3498db; /* Blue color */
-    color: white;
-    border: 1px solid #2980b9; /* Slightly darker blue */
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 1em;
-    font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin: 5px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+        .tab-button {
+            background-color: #3498db; /* Blue color */
+            color: white;
+            border: 1px solid #2980b9; /* Slightly darker blue */
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-/* Hover effect for buttons */
-.tab-button:hover {
-    background-color: #2980b9; /* Darker blue when hovering */
-    border-color: #1c5987;
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
+        /* Hover effect for buttons */
+        .tab-button:hover {
+            background-color: #2980b9; /* Darker blue when hovering */
+            border-color: #1c5987;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
 
-/* Active button style */
-.tab-button.active {
-    background-color: #2ecc71; /* Green color for active state */
-    border-color: #27ae60;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+        /* Active button style */
+        .tab-button.active {
+            background-color: #2ecc71; /* Green color for active state */
+            border-color: #27ae60;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-.tab-button:focus {
-    outline: none;
-}
+        .tab-button:focus {
+            outline: none;
+        }
 
-/* Adjust button size and alignment in the chart-tabs section */
-.chart-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-/* Section Divider Styles */
-.section-divider {
-    border-top: 1px solid #ddd; /* Light gray border for the divider */
-    margin: 40px 0; /* Add spacing around the divider */
-}
+        /* Adjust button size and alignment in the chart-tabs section */
+        .chart-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
 
-/* Custom styling for dividers with text in between (optional) */
-.section-divider-text {
-    position: relative;
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
+        /* Section Divider Styles */
+        .section-divider {
+            border-top: 1px solid #ddd; /* Light gray border for the divider */
+            margin: 40px 0; /* Add spacing around the divider */
+        }
 
-.section-divider-text::before,
-.section-divider-text::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 40%;
-    height: 1px;
-    background-color: #ddd;
-}
+        /* Custom styling for dividers with text in between (optional) */
+        .section-divider-text {
+            position: relative;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
 
-.section-divider-text::before {
-    left: 0;
-}
+        .section-divider-text::before,
+        .section-divider-text::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background-color: #ddd;
+        }
 
-.section-divider-text::after {
-    right: 0;
-}
+        .section-divider-text::before {
+            left: 0;
+        }
 
-.section-divider-text span {
-    position: relative;
-    z-index: 1;
-    font-size: 1em;
-    font-weight: 600;
-    color: #555;
-    padding: 0 10px;
-    background-color: #f4f4f4;
-}
+        .section-divider-text::after {
+            right: 0;
+        }
 
+        .section-divider-text span {
+            position: relative;
+            z-index: 1;
+            font-size: 1em;
+            font-weight: 600;
+            color: #555;
+            padding: 0 10px;
+            background-color: #f4f4f4;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>COVID-19 Dashboard</h1>
-
+    
         <!-- World Cases and Deaths Section -->
         <section id="section1" class="section">
             <div class="section-header">
@@ -135,7 +135,7 @@
             </div>
         </section>
         <div class="section-divider"></div>
-
+    
         <!-- Global Charts Section -->
         <section id="section2" class="section">
             <div class="section-header">
@@ -172,7 +172,7 @@
             </div>
         </section>
         <div class="section-divider"></div>
-
+    
         <!-- Hospitalization Section -->
         <section id="section3" class="section">
             <div class="section-header">
@@ -228,190 +228,297 @@
             </div>
         </section>
         <div class="section-divider"></div>
-
+    
         <!-- Vaccination Data Section -->
-<section id="section4" class="section">
-    <div class="section-header">
-        <h2>Vaccination Data</h2>
+        <section id="section4" class="section">
+            <div class="section-header">
+                <h2>Vaccination Data</h2>
+            </div>
+            <div class="charts">
+                <!-- Tabs for toggling charts (local to this section) -->
+                <div class="chart-tabs">
+                    <button class="tab-button active" data-chart="vaccinationChart1">Vaccination Rate vs Booster Dose Rate</button>
+                    <button class="tab-button" data-chart="vaccinationChart2">Breakdown of Vaccines Used</button>
+                    <button class="tab-button" data-chart="vaccinationChart3">Top 10 Total Vaccinations by Country</button>
+                </div>
+                <!-- Chart containers (Initially only the first one is visible) -->
+                <div class="chart-container" id="vaccinationChart1" style="display: block;">
+                    <h3>Vaccination Rate vs Booster Dose Rate</h3>
+                    <canvas id="scatter-plot"></canvas>
+                </div>
+                <div class="chart-container" id="vaccinationChart2" style="display: none;">
+                    <h3>Bubble Chart Example</h3>
+                    <canvas id="myBubbleChart"></canvas>
+                </div>
+                <div class="chart-container" id="vaccinationChart3" style="display: none;">
+                    <h3>Top 10 Total Vaccinations by Country</h3>
+                    <div id="treemap"></div>
+                </div>
+            </div>
+        </section>
     </div>
-    <div class="charts">
-        <!-- Tabs for toggling charts (local to this section) -->
-        <div class="chart-tabs">
-            <button class="tab-button active" data-chart="vaccinationChart1">Vaccination Rate vs Booster Dose Rate</button>
-            <button class="tab-button" data-chart="vaccinationChart2">Breakdown of Vaccines Used</button>
-            <button class="tab-button" data-chart="vaccinationChart3">Total Vaccinations by Country</button>
-        </div>
-        <!-- Chart containers (Initially only the first one is visible) -->
-        <div class="chart-container" id="vaccinationChart1" style="display: block;">
-            <h3>Vaccination Rate vs Booster Dose Rate</h3>
-            <canvas id="scatter-plot"></canvas>
-        </div>
-        <div class="chart-container" id="vaccinationChart2" style="display: none;">
-            <h3>Breakdown of Vaccines Used</h3>
-            <canvas id="stacked-bar-chart"></canvas>
-        </div>
-        <div class="chart-container" id="vaccinationChart3" style="display: none;">
-            <h3>Total Vaccinations by Country</h3>
-            <div id="treemap"></div>
-        </div>
-    </div>
-</section>
-    </div>
+    
 
     <script src="script.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-    // Function to toggle charts within each section
-    function toggleCharts(sectionId) {
-        const section = document.querySelector(`#${sectionId}`);
-        const tabButtons = section.querySelectorAll(".tab-button");
-        const chartContainers = section.querySelectorAll(".chart-container");
-
-        tabButtons.forEach(button => {
-            button.addEventListener("click", function() {
-                // Remove active class from all buttons in this section
-                tabButtons.forEach(btn => btn.classList.remove("active"));
-                // Add active class to clicked button
-                this.classList.add("active");
-
-                // Hide all chart containers
-                chartContainers.forEach(container => container.style.display = "none");
-
-                // Show selected chart
-                const chartToShow = this.getAttribute("data-chart");
-                const selectedChart = section.querySelector(`#${chartToShow}`);
-                if (selectedChart) {
-                    selectedChart.style.display = "block";
+        document.addEventListener("DOMContentLoaded", function () {
+            // Function to toggle charts within each section
+            function toggleCharts(sectionId) {
+                const section = document.querySelector(`#${sectionId}`);
+                const tabButtons = section.querySelectorAll(".tab-button");
+                const chartContainers = section.querySelectorAll(".chart-container");
+    
+                tabButtons.forEach(button => {
+                    button.addEventListener("click", function () {
+                        // Remove active class from all buttons in this section
+                        tabButtons.forEach(btn => btn.classList.remove("active"));
+                        // Add active class to the clicked button
+                        this.classList.add("active");
+    
+                        // Hide all chart containers
+                        chartContainers.forEach(container => container.style.display = "none");
+    
+                        // Show the selected chart
+                        const chartToShow = this.getAttribute("data-chart");
+                        const selectedChart = section.querySelector(`#${chartToShow}`);
+                        if (selectedChart) {
+                            selectedChart.style.display = "block";
+                        }
+                    });
+                });
+    
+                // Ensure the first tab and chart are active by default
+                if (tabButtons.length > 0) {
+                    tabButtons[0].classList.add("active");
+                    chartContainers[0].style.display = "block";
                 }
+            }
+    
+            // Apply toggleCharts to each section
+            ["section1", "section2", "section3", "section4"].forEach(toggleCharts);
+    
+            // Load CSV data
+            d3.csv('vaccination-data.csv', function (data) {
+                // Parse the data
+                data.forEach(function (d) {
+                    d.totalVaccinations = +d.TOTAL_VACCINATIONS;
+                    d.vaccinationsPer100 = +d.TOTAL_VACCINATIONS_PER100;
+                    d.boosterDoseRate = +d.PERSONS_BOOSTER_ADD_DOSE_PER100;
+                    d.radius = parseInt(d.TOTAL_VACCINATIONS, 10) / 1000000 || 0; // Handle missing values
+
+                    d.vaccinationRate = +d.TOTAL_VACCINATIONS_PER100; // Alias for clarity
+                    d.country = d.COUNTRY;
+                });
+    
+                // 1. Bubble Chart
+                const bubbleData = data.map(d => ({
+                    x: d.vaccinationsPer100 || 0,
+                    y: d.boosterDoseRate || 0,
+                    r: d.radius || 5, // Default radius if missing
+                    label: d.country
+                }));
+    
+                const bubbleChartData = {
+                    datasets: [{
+                        label: 'Vaccination and Booster Data',
+                        data: bubbleData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        hoverBackgroundColor: 'rgba(255, 159, 64, 0.5)',
+                        hoverBorderColor: 'rgba(255, 159, 64, 1)',
+                        hoverRadius: 5
+                    }]
+                };
+    
+                const bubbleConfig = {
+                    type: 'bubble',
+                    data: bubbleChartData,
+                    options: {
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        const dataPoint = context.raw;
+                                        return `${dataPoint.label}: [x=${dataPoint.x}, y=${dataPoint.y}, r=${dataPoint.r}]`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { title: { display: true, text: 'Total Vaccinations per 100 People' } },
+                            y: { title: { display: true, text: 'Booster Dose Rate (%)' } }
+                        }
+                    }
+                };
+    
+                const ctxBubble = document.getElementById('myBubbleChart').getContext('2d');
+                new Chart(ctxBubble, bubbleConfig);
+    
+                // 2. Scatter Plot (Vaccination Rate vs Booster Dose Rate)
+                const ctx1 = document.getElementById('scatter-plot').getContext('2d');
+                const scatterPlot = new Chart(ctx1, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [{
+                            label: 'Vaccination Rate vs Booster Dose Rate',
+                            data: data.map((d) => ({
+                                x: d.vaccinationRate,
+                                y: d.boosterDoseRate
+                            })),
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: { title: { display: true, text: 'Vaccination Rate (%)' } },
+                            y: { title: { display: true, text: 'Booster Dose Rate (%)' } }
+                        }
+                    }
+                });
+    
+            // Horizontal Bar Chart Visualization
+            const margin = { top: 30, right: 50, bottom: 50, left: 200 };
+            const width = 1100 - margin.left - margin.right;
+            const height = 445 - margin.top - margin.bottom;
+
+            const svg = d3.select("#treemap")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Create tooltip div
+            const tooltip = d3.select("#treemap")
+                .append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0)
+                .style("position", "absolute")
+                .style("background-color", "white")
+                .style("border", "solid 1px #aaa")
+                .style("border-radius", "5px")
+                .style("padding", "10px")
+                .style("pointer-events", "none");
+
+            // Prepare the data
+            const top10Data = data
+                .sort((a, b) => (b.totalVaccinations || 0) - (a.totalVaccinations || 0))
+                .slice(0, 10);
+
+            // Setup Y scale for countries
+            const y0 = d3.scale.ordinal()
+                .domain(top10Data.map(d => d.country))
+                .rangeRoundBands([0, height], 0.2);
+
+            // X scale 
+            const x = d3.scale.linear()
+                .domain([0, d3.max(top10Data, d => d.totalVaccinations || 0)])
+                .range([0, width]);
+
+            // Create a more modern x-axis with fewer, cleaner ticks
+            const xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom")
+                .ticks(5)
+                .tickFormat(d3.format(".2s")); // Abbreviated number format
+
+            // Create a more modern y-axis
+            const yAxis = d3.svg.axis()
+                .scale(y0)
+                .orient("left")
+                .tickSize(0);
+
+            // X Axis
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", `translate(0,${height})`)
+                .call(xAxis)
+                .selectAll("text")
+                .style("text-anchor", "middle")
+                .attr("fill", "#6a7985")
+                .attr("font-size", "12px");
+
+            // Y Axis
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("fill", "#6a7985")
+                .attr("font-size", "12px");
+
+            // X-axis label
+            svg.append("text")
+                .attr("transform", `translate(${width/2},${height + 40})`)
+                .style("text-anchor", "middle")
+                .attr("fill", "#6a7985")
+                .style("font-size", "14px")
+                .text("Total Vaccinations");
+
+            // Add bars with a more modern look
+            svg.selectAll(".bar")
+                .data(top10Data)
+                .enter().append("rect")
+                .attr("class", "bar")
+                .attr("y", d => y0(d.country))
+                .attr("height", y0.rangeBand())
+                .attr("width", d => x(d.totalVaccinations || 0))
+                .attr("fill", "#3498db")  // Modern blue color
+                .attr("rx", 4)  // Rounded corners
+                .attr("opacity", 0.8)  // Slight transparency
+                .on("mouseover", function(d) {
+                    // Highlight bar
+                    d3.select(this)
+                        .attr("opacity", 1)
+                        .attr("fill", "#2980b9");
+                    
+                    // Show tooltip
+                    tooltip.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    
+                    // Tooltip content
+                    tooltip.html(`
+                        <strong>${d.country}</strong><br>
+                        Total Vaccinations: ${d3.format(",")(d.totalVaccinations || 0)}
+                    `)
+                    .style("left", (d3.event.pageX + 10) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+                })
+                .on("mouseout", function() {
+                    // Restore original bar state
+                    d3.select(this)
+                        .attr("opacity", 0.8)
+                        .attr("fill", "#3498db");
+                    
+                    // Hide tooltip
+                    tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
+
+            // Optional grid lines
+            svg.append("g")
+                .attr("class", "grid")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom")
+                    .tickSize(-height, 0, 0)
+                    .tickFormat("")
+                )
+                .style("stroke-dasharray", "3 3")
+                .style("stroke", "#e0e0e0")
+                .style("fill", "none");
             });
         });
-
-        // Ensure the first tab and chart are active by default
-        if (tabButtons.length > 0) {
-            tabButtons[0].classList.add("active");
-            chartContainers[0].style.display = "block";
-        }
-    }
-
-    // Apply toggleCharts to each section
-    toggleCharts("section1"); // World Cases and Deaths Section
-    toggleCharts("section2"); // Global Charts Section
-    toggleCharts("section3"); // Hospitalization Section
-    toggleCharts("section4"); // Vaccination Section
-
-    // Load CSV data
-    d3.csv('vaccination-data.csv', function(data) {
-        // Parse the data
-        data.forEach(function(d) {
-            d.vaccinationRate = +d.PERSONS_VACCINATED_1PLUS_DOSE_PER100;
-            d.totalVaccinations = +d.TOTAL_VACCINATIONS;
-            d.numVaccineTypes = +d.NUMBER_VACCINES_TYPES_USED || 0; // Handle missing values
-            d.boosterDoseRate = +d.PERSONS_BOOSTER_ADD_DOSE_PER100;
-            d.country = d.COUNTRY;
-        });
-
-        // 1. Scatter Plot (Vaccination Rate vs Booster Dose Rate) - Your existing scatter plot
-        const ctx1 = document.getElementById('scatter-plot').getContext('2d');
-        const scatterPlot = new Chart(ctx1, {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Vaccination Rate vs Booster Dose Rate',
-                    data: data.map((d) => ({
-                        x: d.vaccinationRate,
-                        y: d.boosterDoseRate
-                    })),
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: { 
-                        title: { display: true, text: 'Vaccination Rate (%)' }
-                    },
-                    y: {
-                        title: { display: true, text: 'Booster Dose Rate (%)' }
-                    }
-                }
-            }
-        });
-
-        // 2. Bubble Chart (Vaccination Rate vs Total Vaccinations)
-        const ctx2 = document.getElementById('bubble-chart').getContext('2d');
-        const bubbleChart = new Chart(ctx2, {
-            type: 'bubble',
-            data: {
-                datasets: [{
-                    label: 'Vaccination Rate vs Total Vaccinations',
-                    data: data.map((d) => ({
-                        x: d.vaccinationRate,
-                        y: d.totalVaccinations,
-                        r: d.numVaccineTypes * 2 // Adjust the size of bubbles (based on number of vaccine types)
-                    })),
-                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: { 
-                        title: { display: true, text: 'Vaccination Rate (%)' }
-                    },
-                    y: {
-                        title: { display: true, text: 'Total Vaccinations' }
-                    }
-                }
-            }
-        });
-
-        // 3. Treemap (Countries by Total Vaccinations and Booster Dose Rate)
-        const width = 800, height = 500;
-
-        // Initialize the treemap layout with fixed size and value attribute
-        const treemap = d3.layout.treemap()
-            .size([width, height])
-            .sticky(true)
-            .value(function(d) { return d.totalVaccinations; });
-
-        const color = d3.scale.linear()
-            .domain([0, 50, 100])
-            .range(["#d3d3d3", "#00ff00", "#006400"]);
-
-        const svg3 = d3.select('#treemap-chart').append('svg')
-            .attr('width', width)
-            .attr('height', height);
-
-        const nodes = treemap.nodes({children: data})
-            .filter(function(d) { return !d.children; });
-
-        const countryBlocks = svg3.selectAll('g')
-            .data(nodes)
-            .enter().append('g')
-            .attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
-
-        countryBlocks.append('rect')
-            .attr('width', function(d) { return d.dx; })
-            .attr('height', function(d) { return d.dy; })
-            .style('fill', function(d) { return color(d.boosterDoseRate); })
-            .style('stroke', '#fff')
-            .style('stroke-width', 1);
-
-        countryBlocks.append('text')
-            .attr('x', 5)
-            .attr('y', 15)
-            .text(function(d) { return d.country; })
-            .style('font-size', '12px')
-            .style('fill', '#000');
-    });
-});
-
-
     </script>
+     
+    
     
 </body>
 </html>

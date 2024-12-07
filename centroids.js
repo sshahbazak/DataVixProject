@@ -146,7 +146,7 @@ const countryCentroids = {
     "MS": { latitude: 16.7425, longitude: -62.1874 }, // Montserrat
     "MT": { latitude: 35.9375, longitude: 14.3754 }, // Malta
     "MU": { latitude: -20.348404, longitude: 57.552152 }, // Mauritius
-    // "MV": { latitude: 3.2028, longitude: 73.2207 }, // Maldives
+    "MV": { latitude: 3.2028, longitude: 73.2207 }, // Maldives
     "MW": { latitude: -13.2543, longitude: 34.3015 }, // Malawi
     "MX": { latitude: 23.6345, longitude: -102.5528 }, // Mexico
     "MY": { latitude: 4.2105, longitude: 101.9758 }, // Malaysia
@@ -172,11 +172,11 @@ const countryCentroids = {
     "PK": { latitude: 30.3753, longitude: 69.3451 }, // Pakistan
     "PL": { latitude: 51.9194, longitude: 19.1451 }, // Poland
     "PM": { latitude: 46.9419, longitude: -56.2711 }, // Saint Pierre and Miquelon
-    "PN": { latitude: -24.3762, longitude: -128.3242 }, // Pitcairn Islands
+    "PN": { latitude: -25.0704, longitude: -130.4475 }, // Pitcairn Islands
     "PR": { latitude: 18.2208, longitude: -66.5901 }, // Puerto Rico
     "PT": { latitude: 39.3999, longitude: -8.2245 }, // Portugal
     "PW": { latitude: 7.5149, longitude: 134.5825 }, // Palau
-    "PY": { latitude: -23.4425, longitude: -58.4438 }, // Paraguay
+    "PY": { latitude: -23.4429, longitude: -58.4438 }, // Paraguay
     "QA": { latitude: 25.276987, longitude: 51.520008 }, // Qatar
     "RE": { latitude: -21.1151, longitude: 55.5364 }, // Réunion
     "RO": { latitude: 45.9432, longitude: 24.9668 }, // Romania
@@ -184,14 +184,14 @@ const countryCentroids = {
     "RU": { latitude: 61.5240, longitude: 105.3188 }, // Russia
     "RW": { latitude: -1.9403, longitude: 29.8739 }, // Rwanda
     "SA": { latitude: 23.8859, longitude: 45.0792 }, // Saudi Arabia
-    "SB": { latitude: -9.6457, longitude: 160.1562 }, // Solomon Islands
+    "SB": { latitude: -9.4280, longitude: 160.0079 }, // Solomon Islands
     "SC": { latitude: -4.6796, longitude: 55.4919 }, // Seychelles
     "SD": { latitude: 12.8628, longitude: 30.2176 }, // Sudan
     "SE": { latitude: 60.1282, longitude: 18.6435 }, // Sweden
     "SG": { latitude: 1.3521, longitude: 103.8198 }, // Singapore
-    "SH": { latitude: -15.9650, longitude: -5.7089 }, // Saint Helena
+    "SH": { latitude: -15.9650, longitude: -5.7036 }, // Saint Helena
     "SI": { latitude: 46.1512, longitude: 14.9955 }, // Slovenia
-    "SJ": { latitude: 77.5536, longitude: 23.6703 }, // Svalbard and Jan Mayen
+    "SJ": { latitude: 77.9999, longitude: 2.5000 }, // Svalbard and Jan Mayen
     "SK": { latitude: 48.6690, longitude: 19.6990 }, // Slovakia
     "SL": { latitude: 8.4606, longitude: -11.7799 }, // Sierra Leone
     "SM": { latitude: 43.9333, longitude: 12.4469 }, // San Marino
@@ -199,12 +199,12 @@ const countryCentroids = {
     "SO": { latitude: 5.1521, longitude: 46.1996 }, // Somalia
     "SR": { latitude: 3.9193, longitude: -56.0278 }, // Suriname
     "SS": { latitude: 4.8594, longitude: 31.5713 }, // South Sudan
-    "ST": { latitude: 0.1860, longitude: 6.6131 }, // Sao Tome and Principe
+    "ST": { latitude: -0.1860, longitude: 6.6131 }, // Sao Tome and Principe
     "SV": { latitude: 13.7942, longitude: -88.8965 }, // El Salvador
     "SX": { latitude: 18.0420, longitude: -63.0574 }, // Sint Maarten
     "SY": { latitude: 34.8021, longitude: 38.9968 }, // Syria
     "SZ": { latitude: -26.5225, longitude: 31.4659 }, // Eswatini
-    "TC": { latitude: 21.6940, longitude: -71.7979 }, // Turks and Caicos Islands
+    "TC": { latitude: 21.7510, longitude: -71.1490 }, // Turks and Caicos Islands
     "TD": { latitude: 15.4542, longitude: 18.7322 }, // Chad
     "TF": { latitude: -49.2804, longitude: 69.3485 }, // French Southern Territories
     "TG": { latitude: 8.6195, longitude: 0.8248 }, // Togo

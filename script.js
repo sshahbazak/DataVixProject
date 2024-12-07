@@ -1,71 +1,37 @@
 // Load the CSV data
-d3.csv("Hospitalization_data.csv", processHospitalizationData);
-
-// Process hospitalization data
-function processHospitalizationData(data) {
-    const processedData = extractHospitalizationData(data);
-    updateKPIs(processedData);
-    createCharts(processedData);
-}
-
-// Extract hospitalization data
-function extractHospitalizationData(data) {
-    const weekEndingDates = data.map(d => d['Week Ending Date']);
-    const adultCovidAdmissions = data.map(d => +d['Weekly Total Adult COVID-19 Admissions']);
-    const pediatricCovidAdmissions = data.map(d => +d['Weekly Total Pediatric COVID-19 Admissions']);
-    const totalCovidAdmissions = data.map(d => +d['Weekly Total COVID-19 Admissions']);
-    const influenzaAdmissions = data.map(d => +d['Weekly Total Influenza Admissions']);
+d3.csv("Hospitalization_data.csv", function(data) {
+    // Process data
+    const weekEndingDates = data.map(function(d) { return d['Week Ending Date']; });
+    const adultCovidAdmissions = data.map(function(d) { return +d['Weekly Total Adult COVID-19 Admissions']; });
+    const pediatricCovidAdmissions = data.map(function(d) { return +d['Weekly Total Pediatric COVID-19 Admissions']; });
+    const totalCovidAdmissions = data.map(function(d) { return +d['Weekly Total COVID-19 Admissions']; }); // Adjusted for total COVID-19 admissions
+    const influenzaAdmissions = data.map(function(d) { return +d['Weekly Total Influenza Admissions']; });
     const totalAdultAdmissions = d3.sum(adultCovidAdmissions);
     const totalPediatricAdmissions = d3.sum(pediatricCovidAdmissions);
     const averageAdultAdmissions = (totalAdultAdmissions / adultCovidAdmissions.length).toFixed(2);
     const averagePediatricAdmissions = (totalPediatricAdmissions / pediatricCovidAdmissions.length).toFixed(2);
-    const totalInpatientBedsOccupied = data.map(d => +d['Weekly Average Inpatient Beds Occupied']);
-    const totalInpatientBeds = data.map(d => +d['Weekly Average Inpatient Beds']);
+    const totalInpatientBedsOccupied = data.map(function(d) { return +d['Weekly Average Inpatient Beds Occupied']; });
+    const totalInpatientBeds = data.map(function(d) { return +d['Weekly Average Inpatient Beds']; });
     const occupancyRate = ((d3.sum(totalInpatientBedsOccupied) / d3.sum(totalInpatientBeds)) * 100).toFixed(2);
 
-    return {
-        weekEndingDates,
-        adultCovidAdmissions,
-        pediatricCovidAdmissions,
-        totalCovidAdmissions,
-        influenzaAdmissions,
-        totalAdultAdmissions,
-        totalPediatricAdmissions,
-        averageAdultAdmissions,
-        averagePediatricAdmissions,
-        occupancyRate
-    };
-}
+    // Update KPIs
+    document.getElementById('totalAdultAdmissions').innerText = totalAdultAdmissions.toLocaleString();
+    document.getElementById('totalPediatricAdmissions').innerText = totalPediatricAdmissions.toLocaleString();
+    document.getElementById('averageAdultAdmissions').innerText = averageAdultAdmissions.toLocaleString();
+    document.getElementById('averagePediatricAdmissions').innerText = averagePediatricAdmissions.toLocaleString();
+    document.getElementById('bedOccupancyRate').innerText = occupancyRate + '%';
 
-// Update KPIs
-function updateKPIs(data) {
-    document.getElementById('totalAdultAdmissions').innerText = data.totalAdultAdmissions.toLocaleString();
-    document.getElementById('totalPediatricAdmissions').innerText = data.totalPediatricAdmissions.toLocaleString();
-    document.getElementById('averageAdultAdmissions').innerText = data.averageAdultAdmissions.toLocaleString();
-    document.getElementById('averagePediatricAdmissions').innerText = data.averagePediatricAdmissions.toLocaleString();
-    document.getElementById('bedOccupancyRate').innerText = data.occupancyRate + '%';
-}
-
-// Create charts
-function createCharts(data) {
-    createLineChart('adultCovidAdmissionsChart', 'Adult COVID-19 Admissions', data.weekEndingDates, data.adultCovidAdmissions, 'rgba(255, 99, 132, 1)', 'rgba(255, 99, 132, 0.2)');
-    createLineChart('pediatricCovidAdmissionsChart', 'Pediatric COVID-19 Admissions', data.weekEndingDates, data.pediatricCovidAdmissions, 'rgba(54, 162, 235, 1)', 'rgba(54, 162, 235, 0.2)');
-    createLineChart('totalAdmissionsChart', 'Total COVID-19 Admissions', data.weekEndingDates, data.totalCovidAdmissions, 'rgba(255, 206, 86, 1)', 'rgba(255, 206, 86, 0.2)');
-    createLineChart('influenzaAdmissionsChart', 'Influenza Admissions', data.weekEndingDates, data.influenzaAdmissions, 'rgba(75, 192, 192, 1)', 'rgba(75, 192, 192, 0.2)');
-}
-
-// Create a line chart
-function createLineChart(chartId, label, labels, data, borderColor, backgroundColor) {
-    const ctx = document.getElementById(chartId).getContext('2d');
-    new Chart(ctx, {
+    // Create Adult COVID-19 Admissions Chart
+    const ctxAdult = document.getElementById('adultCovidAdmissionsChart').getContext('2d');
+    new Chart(ctxAdult, {
         type: 'line',
         data: {
-            labels: labels,
+            labels: weekEndingDates,
             datasets: [{
-                label: label,
-                data: data,
-                borderColor: borderColor,
-                backgroundColor: backgroundColor,
+                label: 'Adult COVID-19 Admissions',
+                data: adultCovidAdmissions,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderWidth: 1,
                 fill: true
             }]
@@ -83,21 +49,99 @@ function createLineChart(chartId, label, labels, data, borderColor, backgroundCo
             }
         }
     });
-}
 
-// Load and aggregate CSV data using D3
-d3.csv("WHO-COVID-19-global-daily-data.csv", processGlobalCovidData);
+    // Create Pediatric COVID-19 Admissions Chart
+    const ctxPediatric = document.getElementById('pediatricCovidAdmissionsChart').getContext('2d');
+    new Chart(ctxPediatric, {
+        type: 'line',
+        data: {
+            labels: weekEndingDates,
+            datasets: [{
+                label: 'Pediatric COVID-19 Admissions',
+                data: pediatricCovidAdmissions,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    scaleLabel: { display: true, labelString: 'Week Ending Date' }
+                }],
+                yAxes: [{
+                    scaleLabel: { display: true, labelString: 'Number of Admissions' },
+                    ticks: { beginAtZero: true }
+                }]
+            }
+        }
+    });
 
-// Process global COVID-19 data
-function processGlobalCovidData(data) {
-    const processedData = aggregateGlobalCovidData(data);
-    updateGlobalKPIs(processedData);
-    createGlobalCharts(processedData);
-    generateMap(processedData.casesByCountry, processedData.deathsByCountry);
-}
+    // Create Total COVID-19 Admissions Chart
+    const ctxTotal = document.getElementById('totalAdmissionsChart').getContext('2d');
+    new Chart(ctxTotal, {
+        type: 'line',
+        data: {
+            labels: weekEndingDates,
+            datasets: [{
+                label: 'Total COVID-19 Admissions',
+                data: totalCovidAdmissions,
+                borderColor: 'rgba(255, 206, 86, 1)',
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    scaleLabel: { display: true, labelString: 'Week Ending Date' }
+                }],
+                yAxes: [{
+                    scaleLabel: { display: true, labelString: 'Number of Admissions' },
+                    ticks: { beginAtZero: true }
+                }]
+            }
+        }
+    });
 
-// Aggregate global COVID-19 data
-function aggregateGlobalCovidData(data) {
+    // Create Influenza Admissions Chart
+    const ctxInfluenza = document.getElementById('influenzaAdmissionsChart').getContext('2d');
+    new Chart(ctxInfluenza, {
+        type: 'line',
+        data: {
+            labels: weekEndingDates,
+            datasets: [{
+                label: 'Influenza Admissions',
+                data: influenzaAdmissions,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    scaleLabel: { display: true, labelString: 'Week Ending Date' }
+                }],
+                yAxes: [{
+                    scaleLabel: { display: true, labelString: 'Number of Admissions' },
+                    ticks: { beginAtZero: true }
+                }]
+            }
+        }
+    });
+});
+
+
+    // Load and aggregate CSV data using D3
+d3.csv("WHO-COVID-19-global-daily-data.csv", function(data) {
+    // Aggregate cumulative cases and cumulative deaths by country
     const countryData = d3.nest()
         .key(d => d.Country_code)
         .rollup(d => {
@@ -107,11 +151,12 @@ function aggregateGlobalCovidData(data) {
         })
         .map(data);
 
+    // Prepare bubbles data for visualization
     const bubblesData = Object.keys(countryData).map(countryCode => {
         const centroid = countryCentroids[countryCode] || { latitude: 0, longitude: 0 };
         return {
             centered: countryCode,
-            radius: Math.sqrt(countryData[countryCode].totalImpact) / 300,
+            radius: Math.sqrt(countryData[countryCode].totalImpact) / 300, // Adjusted scaling for bubbles
             fillKey: 'Trouble',
             cumulativeCases: countryData[countryCode].cumulativeCases,
             cumulativeDeaths: countryData[countryCode].cumulativeDeaths,
@@ -121,72 +166,16 @@ function aggregateGlobalCovidData(data) {
         };
     });
 
-    return { countryData, bubblesData };
-}
+    // Initialize the map and add bubbles
+    initializeMap('worldMap', bubblesData);
+});
 
-// Update global KPIs
-function updateGlobalKPIs(data) {
-    d3.select("#total-cases").text(data.totalCases.toLocaleString());
-    d3.select("#total-deaths").text(data.totalDeaths.toLocaleString());
-    d3.select("#last-date").text(data.lastDate);
-    d3.select("#last-day-cases").text(data.lastDayCases.toLocaleString());
-    d3.select("#last-day-deaths").text(data.lastDayDeaths.toLocaleString());
-    d3.select("#percent-change-cases").text(`Cases: ${data.percentChangeCases.toFixed(2)}%`);
-    d3.select("#percent-change-deaths").text(`Deaths: ${data.percentChangeDeaths.toFixed(2)}%`);
-}
-
-// Create global charts
-function createGlobalCharts(data) {
-    createPieChart('cases-pie-chart', data.casesByCountry);
-    createPieChart('deaths-pie-chart', data.deathsByCountry);
-    createBarChart('cumulative-cases-bar-chart', data.cumulativeCasesOverTime, 'Cumulative Cases', '#36A2EB');
-    createBarChart('cumulative-deaths-bar-chart', data.cumulativeDeathsOverTime, 'Cumulative Deaths', '#FF6384');
-    createLineChart('new-cases-line-chart', 'New Cases', data.newCasesOverTime, '#36A2EB');
-    createLineChart('new-deaths-line-chart', 'New Deaths', data.newDeathsOverTime, '#FF6384');
-}
-
-// Create a pie chart
-function createPieChart(chartId, data) {
-    const ctx = document.getElementById(chartId).getContext('2d');
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            datasets: [{
-                data: Object.values(data),
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-            }],
-            labels: Object.keys(data)
-        },
-        options: {
-            responsive: true
-        }
-    });
-}
-
-// Create a bar chart
-function createBarChart(chartId, data, label, color) {
-    const ctx = document.getElementById(chartId).getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: Object.keys(data),
-            datasets: [{
-                label: label,
-                data: Object.values(data),
-                backgroundColor: color
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-}
-
-// Initialize the map
+// Function to initialize the map
 function initializeMap(containerId, bubblesData) {
+    // Clear the map container before creating a new map
     document.getElementById(containerId).innerHTML = '';
 
-    const map = new Datamap({
+    var map = new Datamap({
         scope: 'world',
         element: document.getElementById(containerId),
         geographyConfig: {
@@ -196,13 +185,13 @@ function initializeMap(containerId, bubblesData) {
             borderWidth: 0.5
         },
         bubblesConfig: {
-            popupTemplate: (geography, data) => `
-                <div class="hoverinfo">
-                    Country: ${data.centered}<br>
-                    Cumulative Cases: ${data.cumulativeCases.toLocaleString()}<br>
-                    Cumulative Deaths: ${data.cumulativeDeaths.toLocaleString()}<br>
-                    Total Impact: ${data.totalImpact.toLocaleString()}
-                </div>`
+            popupTemplate: function(geography, data) {
+                return `<div class="hoverinfo">Country: ${data.centered}<br>
+                        Cumulative Cases: ${data.cumulativeCases.toLocaleString()}<br>
+                        Cumulative Deaths: ${data.cumulativeDeaths.toLocaleString()}<br>
+                        Total Impact: ${data.totalImpact.toLocaleString()}</div>`;
+            },
+            fillOpacity: 0.5
         },
         fills: {
             'Visited': '#4caf50',
@@ -218,117 +207,361 @@ function initializeMap(containerId, bubblesData) {
         }
     });
 
+    // Add bubbles for cumulative cases and deaths data
     map.bubbles(bubblesData, {
-        popupTemplate: (geo, data) => `
-            <div class="hoverinfo">
-                ${data.centered}<br>
-                Cumulative Cases: ${data.cumulativeCases.toLocaleString()}<br>
-                Cumulative Deaths: ${data.cumulativeDeaths.toLocaleString()}<br>
-                Total Impact: ${data.totalImpact.toLocaleString()}
-            </div>`
+        popupTemplate: function(geo, data) {
+            return `<div class="hoverinfo">${data.centered}<br>
+                    Cumulative Cases: ${data.cumulativeCases.toLocaleString()}<br>
+                    Cumulative Deaths: ${data.cumulativeDeaths.toLocaleString()}<br>
+                    Total Impact: ${data.totalImpact.toLocaleString()}</div>`;
+        }
     });
 
     map.fit();
 }
 
-// Adjust map size on window resize
-window.addEventListener('resize', () => initializeMap('worldMap', []));
 
-// Show selected tab
-function showTab(tabId) {
-    d3.selectAll('.tab-content').style('display', 'none');
-    d3.selectAll('.tab-button').classed('active', false);
-    d3.select('#' + tabId).style('display', 'block');
-    d3.select(event.currentTarget).classed('active', true);
-}
-
-// Set default tab to display on load
-document.addEventListener('DOMContentLoaded', () => showTab('world-tab'));
-
-// Process data
-function processData(data) {
-    const casesByCountry = {};
-    const deathsByCountry = {};
-    const cumulativeCasesOverTime = {};
-    const cumulativeDeathsOverTime = {};
-    const newCasesOverTime = {};
-    const newDeathsOverTime = {};
-
-    let totalCases = 0;
-    let totalDeaths = 0;
-    let lastDate = '';
-    let lastDayCases = 0;
-    let lastDayDeaths = 0;
-    let percentChangeCases = 0;
-    let percentChangeDeaths = 0;
-    let previousDayCases = 0;
-    let previousDayDeaths = 0;
-
-    data.forEach((row, index) => {
-        const date = row.Date_reported;
-        const country = row.Country;
-        const newCases = +row.New_cases || 0;
-        const cumulativeCases = +row.Cumulative_cases || 0;
-        const newDeaths = +row.New_deaths || 0;
-        const cumulativeDeaths = +row.Cumulative_deaths || 0;
-
-        totalCases = cumulativeCases;
-        totalDeaths = cumulativeDeaths;
-        lastDate = date;
-
-        if (index === data.length - 1) {
-            lastDayCases = newCases;
-            lastDayDeaths = newDeaths;
-        }
-
-        if (index === data.length - 2) {
-            previousDayCases = newCases;
-            previousDayDeaths = newDeaths;
-        }
-
-        if (previousDayCases > 0) {
-            percentChangeCases = ((lastDayCases - previousDayCases) / previousDayCases) * 100;
-        }
-        if (previousDayDeaths > 0) {
-            percentChangeDeaths = ((lastDayDeaths - previousDayDeaths) / previousDayDeaths) * 100;
-        }
-
-        casesByCountry[country] = (casesByCountry[country] || 0) + cumulativeCases;
-        deathsByCountry[country] = (deathsByCountry[country] || 0) + cumulativeDeaths;
-
-        cumulativeCasesOverTime[date] = (cumulativeCasesOverTime[date] || 0) + cumulativeCases;
-        cumulativeDeathsOverTime[date] = (cumulativeDeathsOverTime[date] || 0) + cumulativeDeaths;
-
-        newCasesOverTime[date] = (newCasesOverTime[date] || 0) + newCases;
-        newDeathsOverTime[date] = (newDeathsOverTime[date] || 0) + newDeaths;
+    // Adjust map size on window resize
+    window.addEventListener('resize', function() {
+        initializeMap('worldMap', []);
     });
 
-    return {
-        totalCases,
-        totalDeaths,
-        lastDate,
-        lastDayCases,
-        lastDayDeaths,
-        percentChangeCases,
-        percentChangeDeaths,
-        casesByCountry,
-        deathsByCountry,
-        cumulativeCasesOverTime,
-        cumulativeDeathsOverTime,
-        newCasesOverTime,
-        newDeathsOverTime
-    };
-}
+    // Function to show selected tab
+    function showTab(tabId) {
+        // Hide all tab content
+        d3.selectAll('.tab-content').style('display', 'none');
 
-// Load CSV data and update KPI values
-d3.csv("WHO-COVID-19-global-daily-data.csv", (error, data) => {
-    if (error) {
-        console.error('Error loading or processing the CSV data:', error);
-        return;
+        // Remove 'active' class from all buttons
+        d3.selectAll('.tab-button').classed('active', false);
+
+        // Show the selected tab content
+        d3.select('#' + tabId).style('display', 'block');
+
+        // Add 'active' class to the selected button
+        d3.select(event.currentTarget).classed('active', true);
     }
 
-    const processedData = processData(data);
-    updateGlobalKPIs(processedData);
-    createGlobalCharts(processedData);
-    generateMap(processedData.casesByCountry, processedData.deathsByCountry);
+
+
+    // Set default tab to display on load
+    document.addEventListener('DOMContentLoaded', function() {
+        showTab('world-tab'); // Show World Cases and Deaths by default
+    });
+
+    // Function to process data
+    function processData(data) {
+        var casesByCountry = {};
+        var deathsByCountry = {};
+        var cumulativeCasesOverTime = {};
+        var cumulativeDeathsOverTime = {};
+        var newCasesOverTime = {};
+        var newDeathsOverTime = {};
+
+        var totalCases = 0;
+        var totalDeaths = 0;
+        var lastDate = '';
+        var lastDayCases = 0;
+        var lastDayDeaths = 0;
+        var percentChangeCases = 0;
+        var percentChangeDeaths = 0;
+        var previousDayCases = 0;
+        var previousDayDeaths = 0;
+
+        data.forEach(function(row, index) {
+            var date = row.Date_reported;
+            var country = row.Country;
+            var newCases = +row.New_cases || 0;
+            var cumulativeCases = +row.Cumulative_cases || 0;
+            var newDeaths = +row.New_deaths || 0;
+            var cumulativeDeaths = +row.Cumulative_deaths || 0;
+
+            // Set total cases and deaths using the last row data
+            totalCases = cumulativeCases;
+            totalDeaths = cumulativeDeaths;
+            lastDate = date;
+
+            // Calculate cases and deaths for the last reported day
+            if (index === data.length - 1) {
+                lastDayCases = newCases;
+                lastDayDeaths = newDeaths;
+            }
+
+            // Get previous day cases and deaths
+            if (index === data.length - 2) {
+                previousDayCases = newCases;
+                previousDayDeaths = newDeaths;
+            }
+
+            // Calculate percentage change (new vs previous day)
+            if (previousDayCases > 0) {
+                percentChangeCases = ((lastDayCases - previousDayCases) / previousDayCases) * 100;
+            }
+            if (previousDayDeaths > 0) {
+                percentChangeDeaths = ((lastDayDeaths - previousDayDeaths) / previousDayDeaths) * 100;
+            }
+
+            casesByCountry[country] = (casesByCountry[country] || 0) + cumulativeCases;
+            deathsByCountry[country] = (deathsByCountry[country] || 0) + cumulativeDeaths;
+
+            cumulativeCasesOverTime[date] = (cumulativeCasesOverTime[date] || 0) + cumulativeCases;
+            cumulativeDeathsOverTime[date] = (cumulativeDeathsOverTime[date] || 0) + cumulativeDeaths;
+
+            newCasesOverTime[date] = (newCasesOverTime[date] || 0) + newCases;
+            newDeathsOverTime[date] = (newDeathsOverTime[date] || 0) + newDeaths;
+        });
+
+        return {
+            totalCases,
+            totalDeaths,
+            lastDate,
+            lastDayCases,
+            lastDayDeaths,
+            percentChangeCases,
+            percentChangeDeaths,
+            casesByCountry,
+            deathsByCountry,
+            cumulativeCasesOverTime,
+            cumulativeDeathsOverTime,
+            newCasesOverTime,
+            newDeathsOverTime
+        };
+    }
+
+    // Load CSV data and update KPI values
+    d3.csv("WHO-COVID-19-global-daily-data.csv", function(error, data) {
+        if (error) {
+            console.error('Error loading or processing the CSV data:', error);
+            return;
+        }
+
+        var processedData = processData(data);
+
+        // Update KPI values
+        d3.select("#total-cases").text(processedData.totalCases.toLocaleString());
+        d3.select("#total-deaths").text(processedData.totalDeaths.toLocaleString());
+        d3.select("#last-date").text(processedData.lastDate);
+        d3.select("#last-day-cases").text(processedData.lastDayCases.toLocaleString());
+        d3.select("#last-day-deaths").text(processedData.lastDayDeaths.toLocaleString());
+        d3.select("#percent-change-cases").text(`Cases: ${processedData.percentChangeCases.toFixed(2)}%`);
+        d3.select("#percent-change-deaths").text(`Deaths: ${processedData.percentChangeDeaths.toFixed(2)}%`);
+
+        // Create the charts
+        createPieChart('cases-pie-chart', processedData.casesByCountry);
+        createPieChart('deaths-pie-chart', processedData.deathsByCountry);
+        createBarChart('cumulative-cases-bar-chart', processedData.cumulativeCasesOverTime, 'Cumulative Cases', '#36A2EB');
+        createBarChart('cumulative-deaths-bar-chart', processedData.cumulativeDeathsOverTime, 'Cumulative Deaths', '#FF6384');
+        createLineChart('new-cases-line-chart', processedData.newCasesOverTime, 'New Cases', '#36A2EB');
+        createLineChart('new-deaths-line-chart', processedData.newDeathsOverTime, 'New Deaths', '#FF6384');
+
+        // Generate the map
+        generateMap(processedData.casesByCountry, processedData.deathsByCountry);
+    });
+
+    // Chart creation functions (pie, bar, and line charts)
+    function createPieChart(chartId, data) {
+        var ctx = document.getElementById(chartId).getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: Object.values(data),
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }],
+                labels: Object.keys(data)
+            },
+            options: {
+                responsive: true
+            }
+        });
+    }
+
+    function createBarChart(chartId, data, label, color) {
+        var ctx = document.getElementById(chartId).getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(data),
+                datasets: [{
+                    label: label,
+                    data: Object.values(data),
+                    backgroundColor: color
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    }
+
+    function createLineChart(chartId, data, label, color) {
+        var ctx = document.getElementById(chartId).getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Object.keys(data),
+                datasets: [{
+                    label: label,
+                    data: Object.values(data),
+                    borderColor: color,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    }
+
+        // Load the CSV data
+d3.csv("Hospitalization_data.csv", function(data) {
+    // Convert 'Week Ending Date' to Date object and sort the data by this date
+    data.forEach(function(d) {
+        d['Week Ending Date'] = new Date(d['Week Ending Date']);
+    });
+
+    // Sort the data by 'Week Ending Date'
+    data.sort(function(a, b) {
+        return a['Week Ending Date'] - b['Week Ending Date']; // Ascending order
+    });
+
+    // After sorting, extract the necessary columns
+    const weekEndingDates = data.map(function(d) { return d['Week Ending Date'].toLocaleDateString(); });
+    const adultCovidAdmissions = data.map(function(d) { return +d['Weekly Total Adult COVID-19 Admissions']; });
+    const pediatricCovidAdmissions = data.map(function(d) { return +d['Weekly Total Pediatric COVID-19 Admissions']; });
+    const totalCovidAdmissions = data.map(function(d) { return +d['Weekly Total COVID-19 Admissions']; });
+    const influenzaAdmissions = data.map(function(d) { return +d['Weekly Total Influenza Admissions']; });
+    const totalAdultAdmissions = d3.sum(adultCovidAdmissions);
+    const totalPediatricAdmissions = d3.sum(pediatricCovidAdmissions);
+    const averageAdultAdmissions = (totalAdultAdmissions / adultCovidAdmissions.length).toFixed(2);
+    const averagePediatricAdmissions = (totalPediatricAdmissions / pediatricCovidAdmissions.length).toFixed(2);
+    const totalInpatientBedsOccupied = data.map(function(d) { return +d['Weekly Average Inpatient Beds Occupied']; });
+    const totalInpatientBeds = data.map(function(d) { return +d['Weekly Average Inpatient Beds']; });
+    const occupancyRate = ((d3.sum(totalInpatientBedsOccupied) / d3.sum(totalInpatientBeds)) * 100).toFixed(2);
+
+    // Update KPIs
+    document.getElementById('totalAdultAdmissions').innerText = totalAdultAdmissions.toLocaleString();
+    document.getElementById('totalPediatricAdmissions').innerText = totalPediatricAdmissions.toLocaleString();
+    document.getElementById('averageAdultAdmissions').innerText = averageAdultAdmissions.toLocaleString();
+    document.getElementById('averagePediatricAdmissions').innerText = averagePediatricAdmissions.toLocaleString();
+    document.getElementById('bedOccupancyRate').innerText = occupancyRate + '%';
+
+    // Create Adult COVID-19 Admissions Chart
+    const ctxAdult = document.getElementById('adultCovidAdmissionsChart').getContext('2d');
+    new Chart(ctxAdult, {
+        type: 'line',
+        data: {
+            labels: weekEndingDates,
+            datasets: [{
+                label: 'Adult COVID-19 Admissions',
+                data: adultCovidAdmissions,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    scaleLabel: { display: true, labelString: 'Week Ending Date' }
+                }],
+                yAxes: [{
+                    scaleLabel: { display: true, labelString: 'Number of Admissions' },
+                    ticks: { beginAtZero: true }
+                }]
+            }
+        }
+    });
+
+    // Create Pediatric COVID-19 Admissions Chart
+    const ctxPediatric = document.getElementById('pediatricCovidAdmissionsChart').getContext('2d');
+    new Chart(ctxPediatric, {
+        type: 'line',
+        data: {
+            labels: weekEndingDates,
+            datasets: [{
+                label: 'Pediatric COVID-19 Admissions',
+                data: pediatricCovidAdmissions,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    scaleLabel: { display: true, labelString: 'Week Ending Date' }
+                }],
+                yAxes: [{
+                    scaleLabel: { display: true, labelString: 'Number of Admissions' },
+                    ticks: { beginAtZero: true }
+                }]
+            }
+        }
+    });
+
+    // Create Total COVID-19 Admissions Chart
+    const ctxTotal = document.getElementById('totalAdmissionsChart').getContext('2d');
+    new Chart(ctxTotal, {
+        type: 'line',
+        data: {
+            labels: weekEndingDates,
+            datasets: [{
+                label: 'Total COVID-19 Admissions',
+                data: totalCovidAdmissions,
+                borderColor: 'rgba(255, 206, 86, 1)',
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    scaleLabel: { display: true, labelString: 'Week Ending Date' }
+                }],
+                yAxes: [{
+                    scaleLabel: { display: true, labelString: 'Number of Admissions' },
+                    ticks: { beginAtZero: true }
+                }]
+            }
+        }
+    });
+
+    // Create Influenza Admissions Chart
+    const ctxInfluenza = document.getElementById('influenzaAdmissionsChart').getContext('2d');
+    new Chart(ctxInfluenza, {
+        type: 'line',
+        data: {
+            labels: weekEndingDates,
+            datasets: [{
+                label: 'Influenza Admissions',
+                data: influenzaAdmissions,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 1,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    scaleLabel: { display: true, labelString: 'Week Ending Date' }
+                }],
+                yAxes: [{
+                    scaleLabel: { display: true, labelString: 'Number of Admissions' },
+                    ticks: { beginAtZero: true }
+                }]
+            }
+        }
+    });
 });
+
+
+
+
